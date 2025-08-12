@@ -6,7 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 Consistent identifier (represents all versions, resolves to latest): [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4553641.svg)](https://doi.org/10.5281/zenodo.4553641)
 
-## Unreleased
+## [v0.10.0](https://github.com/TomMonks/sim-tools/releases/tag/v0.10.0)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16754108.svg)](https://doi.org/10.5281/zenodo.16754108)
+
+### Added
+
+* Add `sort` argument to `DistributionRegistry.create_batch()` for dict inputs, ensuring deterministic results if the config key order changes.
+* Add `_validate_and_create()` to `DistributionRegistry` which checks that the distribution configurations are dictionaries with only two keys: "class_name" and "params".
+* Add tests for the new `sort` argument and `_validate_and_create()` method.
+
+### Changed
+
+* Some linting of `_validation.py`, `time_dependent.py`, `distributions.py` and `trace.py`.
+
+## [v0.9.1](https://github.com/TomMonks/sim-tools/releases/tag/v0.9.1)[[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16754108.svg)](https://doi.org/10.5281/zenodo.16754108)]
 
 ### Added
 
@@ -18,6 +30,10 @@ Consistent identifier (represents all versions, resolves to latest): [![DOI](htt
 
 * Adjusted docstrings to use a more consistent NumPy style.
 * Some linting of `distributions.py`.
+
+### Fixed
+
+* `DiscreteEmpirical` - now allows any type of data to be included. For example, str, as well as numeric value.
 
 ## [v0.9.0](https://github.com/TomMonks/sim-tools/releases/tag/v0.9.0)  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15256118.svg)](https://doi.org/10.5281/zenodo.15256118)
 
