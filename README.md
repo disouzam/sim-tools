@@ -11,7 +11,7 @@
 [![PyPI version fury.io](https://badge.fury.io/py/sim-tools.svg)](https://pypi.python.org/pypi/sim-tools/)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/sim-tools/badges/version.svg)](https://anaconda.org/conda-forge/sim-tools)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/sim-tools/badges/platforms.svg)](https://anaconda.org/conda-forge/sim-tools)
-[![Read the Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://tommonks.github.io/sim-tools)
+[![Read the Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://sim-tools.github.io/sim-tools)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/release/python-360+/)
 
@@ -64,12 +64,12 @@ mamba install sim-tools
 
 ### Binder
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/TomMonks/sim-tools/HEAD)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sim-tools/sim-tools/HEAD)
 
 
 ## Learn how to use `sim-tools`
 
-* Online documentation: https://tommonks.github.io/sim-tools
+* Online documentation: https://sim-tools.github.io/sim-tools
 * Introduction to DES in python: https://health-data-science-or.github.io/simpy-streamlit-tutorial/
 
 ## Citation
@@ -91,7 +91,7 @@ If you use sim-tools for research, a practical report, education or any reason p
 
 # Online Tutorials
 
-* Optimisation Via Simulation [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/TomMonks/sim-tools/blob/master/docs/02_ovs/03_sw21_tutorial.ipynb)
+* Optimisation Via Simulation [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sim-tools/sim-tools/blob/master/docs/02_ovs/03_sw21_tutorial.ipynb)
 
 
 ## Contributing to sim-tools
