@@ -6,9 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 Consistent identifier (represents all versions, resolves to latest): [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4553641.svg)](https://doi.org/10.5281/zenodo.4553641)
 
+## v1.0.3
+
+### Changed
+
+* Switched to trusted publishing for PyPI
+* Migrated repository from tommonks personal to sim-tools organisation
+* Updated package URLS.
+
 ## v1.0.2
 
-## Fixed
+### Fixed
 
 *   **Publish ot PyPI**: Github action to publish to pypi modified to use release/v1 (prior version was sunsetted).
 
