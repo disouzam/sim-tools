@@ -8,7 +8,7 @@ import numpy as np
 from numpy.random import SeedSequence
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import itertools
 
 # pylint: disable=too-few-public-methods
 class NSPPThinning:
@@ -33,7 +33,7 @@ class NSPPThinning:
         """
         Non Stationary Poisson Process via Thinning.
 
-        Time dependency is andled for a single table
+        Time dependency is handled for a single table
         consisting of equally spaced intervals.
 
         Parameters
@@ -54,12 +54,37 @@ class NSPPThinning:
             Random seed for the uniform distribution used
             for acceptance/rejection sampling.
         """
+
+        # -- Defensive parameter check added by TM as part of fix v1.0.4 --
+    
+        # data must be a dataframe
+        if not isinstance(data, pd.DataFrame):
+            raise TypeError(f"Data should be a DataFrame, but got {type(data).__name__}")
+        
+        # Check required columns t and mean_iat are provided. 
+        required_cols = ["t", "mean_iat"]
+        missing_cols = [col for col in required_cols if col not in data.columns]
+        if missing_cols:
+            raise ValueError(f"Missing required columns: {missing_cols}")
+        
+        # empty dataframe or only a single row.
+        if data.empty:
+            raise ValueError(f"Dataframe does not contain any rows. Add at least 2.")
+        elif len(data) == 1:
+            msg = "Dataframe contains a single time point. Add more of use Exponential class."
+            raise ValueError(msg)
+
+        # -- end of defensive code --
+
         self.data = data
         self.arr_rng = np.random.default_rng(random_seed1)
         self.thinning_rng = np.random.default_rng(random_seed2)
 
-        # Find the minimum mean IAT (corresponds to the maximum arrival rate)
-        self.min_iat = data["mean_iat"].min()
+        # drop to numpy for lookup speed
+        self.mean_iats = data["mean_iat"].to_numpy(dtype=float)
+
+        # Get the minimum mean IAT (corresponds to the maximum arrival rate)
+        self.min_iat = self.mean_iats.min()
 
         if self.min_iat <= 0:
             raise ValueError("Mean inter-arrival times must be positive")
@@ -74,6 +99,10 @@ class NSPPThinning:
             raise ValueError(
                 "With only one data point, interval_width must be provided"
             )
+
+        # Pre-compute the acceptance probabilities. Added by TM v1.0.4
+        self.accept_prob = self.min_iat / self.mean_iats
+        self.n_periods = self.mean_iats.size
 
         self.rejects_last_sample = None
 
@@ -90,6 +119,7 @@ class NSPPThinning:
             f"{self.__class__.__name__}(data={data_str}, " +
             f"interval={self.interval})"
         )
+    
 
     def sample(self, simulation_time: float) -> float:
         """
@@ -99,36 +129,30 @@ class NSPPThinning:
         Parameters
         ----------
         simulation_time: float
-            The current simulation time. This is used to look up
-            the mean IAT for the time period.
+            The current simulation time. 
 
         Returns
         -------
         float
             The inter-arrival time
         """
-
-        # this gives us the index of dataframe to use
-        t = int(simulation_time // self.interval) % len(self.data)
-        mean_iat_t = self.data["mean_iat"].iloc[t]
-
-        # set to a large number so that at least 1 sample taken!
-        u = np.inf
-
-        # included for audit and tracking purposes.
-        self.rejects_last_sample = 0
-
+        
         interarrival_time = 0.0
-
-        # We accept the sample if u < (min_iat / mean_iat_t)
-        # This is equivalent to the original u < (lambda_t / lambda_max)
-        # since lambda = 1/mean_iat
-        while u >= (self.min_iat / mean_iat_t):
-            self.rejects_last_sample += 1
+        
+        for self.rejects_last_sample in itertools.count(start=0):
+            # sample the next inter-arrival time and calculate clock time
             interarrival_time += self.arr_rng.exponential(self.min_iat)
-            u = self.thinning_rng.uniform(0.0, 1.0)
+            arrival_sim_clock_time = simulation_time + interarrival_time
 
-        return interarrival_time
+            # get the t index of the candidate arrival
+            # fix v1.0.4 to use 'candidate_arrival_time' Fix by Sammi Rosser
+            t_idx = int(arrival_sim_clock_time // self.interval) % self.n_periods
+
+            # accept or reject? TM modified v1.0.4 to use pre-computed probabilities
+            u = self.thinning_rng.uniform()
+            if u <= self.accept_prob[t_idx]:
+                # accepted so return inter-arrival time
+                return interarrival_time
 
 
 def nspp_simulation(
