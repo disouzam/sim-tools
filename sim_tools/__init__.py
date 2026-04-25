@@ -1,5 +1,5 @@
 """sim-tools"""
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 from . import datasets, distributions, time_dependent, ovs, output_analysis
