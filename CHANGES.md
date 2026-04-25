@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 Consistent identifier (represents all versions, resolves to latest): [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4553641.svg)](https://doi.org/10.5281/zenodo.4553641)
 
+## v1.0.4
+
+Fix to `NSPPThinning` sampling approach. 
+
+### Fixed
+
+* `NSPPThinning.sample()` fixed so that `t` falls into the the time interval where the candidate arrival will occur. This allows the correct acceptance probability to be used.  Prior to this fix t was occuring in the *current* time interval.
+
+### Changed
+
+* **NSPPThinning** now pre-computes the acceptance probabilities on initialisation.  This is means that there are no repeated calculations (divisions) during a simulation run and lookup via `numpy` rather than `pandas`.
+* **NSPPThinning** now validates the `data` parameter: is it a `DataFrame (`TypeError`), does it contain the correct columns (`ValueError`), and is it empty/have more than 1 row (`ValueEror`) .
+
 ## v1.0.3
 
 ### Changed
